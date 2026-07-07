@@ -18,10 +18,10 @@ export function ColumnPicker({ columns, hidden, onToggle, onMove, onReset, isCus
     const hiddenCount = items.filter((c) => hidden.has(c.key)).length;
     return (_jsxs("div", { ref: ref, style: { position: 'relative', display: 'inline-block' }, children: [compact ? (_jsx("button", { type: "button", onClick: () => setOpen((o) => !o), title: "Choose which columns to show and their order", style: {
                     display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                    width: 26, height: 26, padding: 0, lineHeight: 1,
-                    background: isCustomized ? '#eff6ff' : 'transparent', color: '#64748b',
-                    border: `1px solid ${isCustomized ? '#bfdbfe' : '#e2e8f0'}`, borderRadius: 6,
-                    fontSize: 13, cursor: 'pointer',
+                    width: 32, height: 32, padding: 0, lineHeight: 1, flexShrink: 0,
+                    background: isCustomized ? '#eff6ff' : '#fff', color: isCustomized ? '#2563eb' : '#64748b',
+                    border: `1px solid ${isCustomized ? '#bfdbfe' : '#cbd5e1'}`, borderRadius: 8,
+                    fontSize: 14, cursor: 'pointer',
                 }, children: "\u2699" })) : (_jsxs("button", { type: "button", onClick: () => setOpen((o) => !o), title: "Choose which columns to show and their order", style: {
                     display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 14px',
                     background: isCustomized ? '#eff6ff' : '#fff', color: '#334155',

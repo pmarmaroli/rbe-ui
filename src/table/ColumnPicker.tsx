@@ -38,10 +38,10 @@ export function ColumnPicker<T>({ columns, hidden, onToggle, onMove, onReset, is
           title="Choose which columns to show and their order"
           style={{
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-            width: 26, height: 26, padding: 0, lineHeight: 1,
-            background: isCustomized ? '#eff6ff' : 'transparent', color: '#64748b',
-            border: `1px solid ${isCustomized ? '#bfdbfe' : '#e2e8f0'}`, borderRadius: 6,
-            fontSize: 13, cursor: 'pointer',
+            width: 32, height: 32, padding: 0, lineHeight: 1, flexShrink: 0,
+            background: isCustomized ? '#eff6ff' : '#fff', color: isCustomized ? '#2563eb' : '#64748b',
+            border: `1px solid ${isCustomized ? '#bfdbfe' : '#cbd5e1'}`, borderRadius: 8,
+            fontSize: 14, cursor: 'pointer',
           }}
         >
           ⚙

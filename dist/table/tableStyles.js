@@ -84,8 +84,6 @@ const CSS = `
 }
 .rbe-table-btn:hover:not(:disabled) { border-color: var(--blue, #2563eb); color: var(--blue, #2563eb); }
 .rbe-table-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-.rbe-table-btn--primary { background: var(--blue, #2563eb); color: #fff; border-color: var(--blue, #2563eb); }
-.rbe-table-btn--primary:hover:not(:disabled) { background: var(--blue-hover, #1d4ed8); color: #fff; }
 
 .rbe-table-empty { text-align: center; padding: 50px 14px; color: var(--color-text-muted, #94a3b8); font-size: 13px; }
 

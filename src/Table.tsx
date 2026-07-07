@@ -182,7 +182,7 @@ export function Table<T>(props: TableProps<T>) {
         {onApplyFilters && (
           <BlinkButton
             type="button"
-            className={cx('rbe-table-btn', 'rbe-table-btn--primary')}
+            className="rbe-table-btn"
             blinking={filtersDirty}
             onClick={onApplyFilters}
           >
