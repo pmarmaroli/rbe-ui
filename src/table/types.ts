@@ -24,8 +24,18 @@ export interface TableColumn<T> {
   exportValue?: (row: T) => string | number | null | undefined;
   /** Value used when sorting on this column (defaults to exportValue). */
   sortValue?: (row: T) => string | number;
-  /** Filter control rendered in the filter row for this column. */
+  /** Filter control rendered in the filter row for this column. Omit and use `filterOptions` instead for a plain "pick one" column — Table renders the Combobox and applies the filter itself. */
   filterCell?: () => ReactNode;
+  /**
+   * Declarative select-style filter: Table auto-renders a Combobox (desktop +
+   * mobile) and filters rows where `exportValue(row)` equals the chosen
+   * option's value — no filterCell/pending-state wiring needed. Applies
+   * instantly (not gated behind the Search button), same as `isMine`. Use
+   * this by default for any column with a fixed/enumerable set of values
+   * (status, partner, project, …); reach for `filterCell` only when the
+   * predicate isn't a plain equality check (free text, numeric ranges, dates).
+   */
+  filterOptions?: { value: string; label: string }[];
   /**
    * Marks this column as a person's name/email. When set, Table auto-renders
    * a "Me only" toggle in this column's filter cell — return true when `row`

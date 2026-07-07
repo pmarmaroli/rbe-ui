@@ -9,6 +9,7 @@ import { ColumnPicker } from './table/ColumnPicker';
 import { downloadCsv, buildCsvRows } from './table/csv';
 import { ensureTableStyles } from './table/tableStyles';
 import { BlinkButton } from './BlinkButton';
+import { Combobox } from './Combobox';
 
 export type { TableColumn, TableProps } from './table/types';
 export { ColumnPicker } from './table/ColumnPicker';
@@ -55,14 +56,29 @@ export function Table<T>(props: TableProps<T>) {
       return next;
     });
   }
-  const meFiltered = meOnlyColumns.size === 0 ? rows : rows.filter((row) => {
+  // Declarative select-style filters (`filterOptions`) — same ownership
+  // rationale as "Me only": a plain equality check against exportValue needs
+  // no business-specific predicate, so Table applies it directly instead of
+  // requiring a page-side filterCell + pending-state dance.
+  const [selectFilterValues, setSelectFilterValues] = useState<Map<string, string>>(new Map());
+  function setSelectFilter(key: string, value: string) {
+    setSelectFilterValues((prev) => {
+      const next = new Map(prev);
+      if (value) next.set(key, value); else next.delete(key);
+      return next;
+    });
+  }
+
+  const locallyFiltered = (meOnlyColumns.size === 0 && selectFilterValues.size === 0) ? rows : rows.filter((row) => {
     for (const col of columns) {
       if (col.isMine && meOnlyColumns.has(col.key) && !col.isMine(row)) return false;
+      const wanted = selectFilterValues.get(col.key);
+      if (wanted !== undefined && String(col.exportValue?.(row) ?? '') !== wanted) return false;
     }
     return true;
   });
 
-  const { sortKey, dir, toggleSort, setSort, sorted } = useSort(columns, meFiltered, defaultSort);
+  const { sortKey, dir, toggleSort, setSort, sorted } = useSort(columns, locallyFiltered, defaultSort);
   const selection = useRowSelection(sorted, rowId);
   const pagination = usePagination(sorted, pageSizeOptions, defaultPageSize);
 
@@ -159,7 +175,7 @@ export function Table<T>(props: TableProps<T>) {
   }
 
   const sortableColumns = columns.filter((c) => c.sortKey);
-  const filterableColumns = colset.visibleColumns.filter((c) => c.filterCell || c.isMine);
+  const filterableColumns = colset.visibleColumns.filter((c) => c.filterCell || c.isMine || c.filterOptions);
 
   const isEmpty = sorted.length === 0;
   const showEmptyState = isEmpty && hasAnyRows === false;
@@ -240,6 +256,13 @@ export function Table<T>(props: TableProps<T>) {
             <div key={c.key} className="rbe-table-mobile-filter-item">
               <label>{c.label}</label>
               {c.filterCell?.()}
+              {c.filterOptions && (
+                <Combobox
+                  options={c.filterOptions}
+                  value={selectFilterValues.get(c.key) ?? ''}
+                  onChange={(v) => setSelectFilter(c.key, v)}
+                />
+              )}
               {c.isMine && (
                 <label className="rbe-table-me-only">
                   <input type="checkbox" checked={meOnlyColumns.has(c.key)} onChange={() => toggleMeOnly(c.key)} />
@@ -314,6 +337,14 @@ export function Table<T>(props: TableProps<T>) {
               return (
                 <th key={col.key} className={sticky ? 'rbe-table-sticky-th' : undefined} style={sticky ? stickyStyle(stickyIndex(i)) : undefined}>
                   {col.filterCell ? col.filterCell() : null}
+                  {col.filterOptions && (
+                    <Combobox
+                      options={col.filterOptions}
+                      value={selectFilterValues.get(col.key) ?? ''}
+                      onChange={(v) => setSelectFilter(col.key, v)}
+                      className="rbe-table-filter-input"
+                    />
+                  )}
                   {col.isMine && (
                     <label className="rbe-table-me-only">
                       <input type="checkbox" checked={meOnlyColumns.has(col.key)} onChange={() => toggleMeOnly(col.key)} />

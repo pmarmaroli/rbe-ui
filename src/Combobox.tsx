@@ -88,11 +88,11 @@ export function Combobox({
   }
 
   return (
-    <div ref={ref} className={cx('rbe-combobox', className)}>
+    <div ref={ref} className="rbe-combobox">
       <input
         {...rest}
         type="text"
-        className="rbe-combobox-input"
+        className={cx('rbe-combobox-input', className)}
         value={displayValue}
         placeholder={placeholder}
         role="combobox"
