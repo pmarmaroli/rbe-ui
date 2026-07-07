@@ -80,14 +80,6 @@ const CSS = `
 .rbe-table-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 .rbe-table-btn--primary { background: var(--blue, #2563eb); color: #fff; border-color: var(--blue, #2563eb); }
 .rbe-table-btn--primary:hover:not(:disabled) { background: var(--blue-hover, #1d4ed8); color: #fff; }
-.rbe-table-btn--pulse { animation: rbe-table-pulse 1.4s ease-in-out infinite; }
-@keyframes rbe-table-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.55); }
-  50% { box-shadow: 0 0 0 6px rgba(37, 99, 235, 0); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .rbe-table-btn--pulse { animation: none; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.35); }
-}
 
 .rbe-table-empty { text-align: center; padding: 50px 14px; color: var(--color-text-muted, #94a3b8); font-size: 13px; }
 

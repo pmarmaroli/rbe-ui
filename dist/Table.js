@@ -7,6 +7,7 @@ import { useRowSelection } from './table/useRowSelection';
 import { ColumnPicker } from './table/ColumnPicker';
 import { downloadCsv, buildCsvRows } from './table/csv';
 import { ensureTableStyles } from './table/tableStyles';
+import { BlinkButton } from './BlinkButton';
 export { ColumnPicker } from './table/ColumnPicker';
 export { NumberRangeFilter } from './table/NumberRangeFilter';
 export { downloadCsv, buildCsvRows } from './table/csv';
@@ -125,7 +126,7 @@ export function Table(props) {
     const showEmptyState = isEmpty && hasAnyRows === false;
     const showNoMatch = isEmpty && !showEmptyState;
     const showSkeleton = !!loading && sorted.length === 0;
-    return (_jsxs("div", { className: cx('rbe-table-wrap', className), children: [_jsxs("div", { className: "rbe-table-toolbar", children: [_jsx(ColumnPicker, { compact: true, columns: colset.orderedColumns, hidden: colset.hidden, onToggle: colset.toggle, onMove: colset.move, onReset: colset.reset, isCustomized: colset.isCustomized }), onApplyFilters && (_jsx("button", { type: "button", className: cx('rbe-table-btn', 'rbe-table-btn--primary', filtersDirty && 'rbe-table-btn--pulse'), onClick: onApplyFilters, children: "Search" })), csvFilename && (_jsx("button", { type: "button", className: "rbe-table-btn", onClick: handleExport, children: "\u2913 Export CSV" }))] }), selectable && selection.selectedRows.length > 0 && bulkActions && (_jsxs("div", { className: "rbe-table-bulk-toolbar", children: [_jsxs("span", { children: [selection.selectedRows.length, " selected"] }), bulkActions(selection.selectedRows, selection.clear), _jsx("button", { type: "button", className: "rbe-table-btn", onClick: selection.clear, children: "Clear selection" })] })), sortableColumns.length > 0 && (_jsxs("select", { className: "rbe-table-mobile-sort", "aria-label": "Sort by", value: sortKey ? `${sortKey}:${dir}` : '', onChange: (e) => {
+    return (_jsxs("div", { className: cx('rbe-table-wrap', className), children: [_jsxs("div", { className: "rbe-table-toolbar", children: [_jsx(ColumnPicker, { compact: true, columns: colset.orderedColumns, hidden: colset.hidden, onToggle: colset.toggle, onMove: colset.move, onReset: colset.reset, isCustomized: colset.isCustomized }), onApplyFilters && (_jsx(BlinkButton, { type: "button", className: cx('rbe-table-btn', 'rbe-table-btn--primary'), blinking: filtersDirty, onClick: onApplyFilters, children: "Search" })), csvFilename && (_jsx("button", { type: "button", className: "rbe-table-btn", onClick: handleExport, children: "\u2913 Export CSV" }))] }), selectable && selection.selectedRows.length > 0 && bulkActions && (_jsxs("div", { className: "rbe-table-bulk-toolbar", children: [_jsxs("span", { children: [selection.selectedRows.length, " selected"] }), bulkActions(selection.selectedRows, selection.clear), _jsx("button", { type: "button", className: "rbe-table-btn", onClick: selection.clear, children: "Clear selection" })] })), sortableColumns.length > 0 && (_jsxs("select", { className: "rbe-table-mobile-sort", "aria-label": "Sort by", value: sortKey ? `${sortKey}:${dir}` : '', onChange: (e) => {
                     const [k, d] = e.target.value.split(':');
                     if (k)
                         setSort(k, d);

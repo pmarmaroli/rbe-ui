@@ -8,6 +8,7 @@ import { useRowSelection } from './table/useRowSelection';
 import { ColumnPicker } from './table/ColumnPicker';
 import { downloadCsv, buildCsvRows } from './table/csv';
 import { ensureTableStyles } from './table/tableStyles';
+import { BlinkButton } from './BlinkButton';
 
 export type { TableColumn, TableProps } from './table/types';
 export { ColumnPicker } from './table/ColumnPicker';
@@ -160,13 +161,14 @@ export function Table<T>(props: TableProps<T>) {
           isCustomized={colset.isCustomized}
         />
         {onApplyFilters && (
-          <button
+          <BlinkButton
             type="button"
-            className={cx('rbe-table-btn', 'rbe-table-btn--primary', filtersDirty && 'rbe-table-btn--pulse')}
+            className={cx('rbe-table-btn', 'rbe-table-btn--primary')}
+            blinking={filtersDirty}
             onClick={onApplyFilters}
           >
             Search
-          </button>
+          </BlinkButton>
         )}
         {csvFilename && (
           <button type="button" className="rbe-table-btn" onClick={handleExport}>⤓ Export CSV</button>
