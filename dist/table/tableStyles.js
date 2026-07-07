@@ -40,6 +40,7 @@ const CSS = `
   font-variant-numeric: tabular-nums;
 }
 .rbe-table tbody tr:last-child td { border-bottom: none; }
+.rbe-table tbody tr:nth-child(even) td { background: var(--color-row-stripe, #f4f8fd); }
 .rbe-table tbody tr:hover td { background: var(--color-row-hover, #f8fafc); }
 .rbe-table-row--clickable { cursor: pointer; }
 .rbe-table-row--selected td { background: var(--color-row-selected, #eff6ff) !important; }
@@ -47,6 +48,7 @@ const CSS = `
 
 .rbe-table-sticky-th { position: sticky; z-index: 3; border-right: 1px solid var(--color-border-light, #e2e8f0); }
 .rbe-table-sticky-td { position: sticky; z-index: 2; background: var(--color-white, #fff); border-right: 1px solid var(--color-border-light, #e2e8f0); }
+.rbe-table tbody tr:nth-child(even) td.rbe-table-sticky-td { background: var(--color-row-stripe, #f4f8fd); }
 .rbe-table tbody tr:hover td.rbe-table-sticky-td { background: var(--color-row-hover, #f8fafc); }
 .rbe-table-row--selected td.rbe-table-sticky-td { background: var(--color-row-selected, #eff6ff) !important; }
 .rbe-table--sticky-header thead th { position: sticky; top: 0; z-index: 4; }
