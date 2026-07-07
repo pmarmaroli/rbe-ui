@@ -149,22 +149,29 @@ export function Table<T>(props: TableProps<T>) {
 
   return (
     <div className={cx('rbe-table-wrap', className)}>
-      {(csvFilename || onApplyFilters) && (
-        <div className="rbe-table-toolbar" style={{ justifyContent: 'flex-end' }}>
-          {onApplyFilters && (
-            <button
-              type="button"
-              className={cx('rbe-table-btn', 'rbe-table-btn--primary', filtersDirty && 'rbe-table-btn--pulse')}
-              onClick={onApplyFilters}
-            >
-              Search
-            </button>
-          )}
-          {csvFilename && (
-            <button type="button" className="rbe-table-btn" onClick={handleExport}>⤓ Export CSV</button>
-          )}
-        </div>
-      )}
+      <div className="rbe-table-toolbar">
+        <ColumnPicker
+          compact
+          columns={colset.orderedColumns}
+          hidden={colset.hidden}
+          onToggle={colset.toggle}
+          onMove={colset.move}
+          onReset={colset.reset}
+          isCustomized={colset.isCustomized}
+        />
+        {onApplyFilters && (
+          <button
+            type="button"
+            className={cx('rbe-table-btn', 'rbe-table-btn--primary', filtersDirty && 'rbe-table-btn--pulse')}
+            onClick={onApplyFilters}
+          >
+            Search
+          </button>
+        )}
+        {csvFilename && (
+          <button type="button" className="rbe-table-btn" onClick={handleExport}>⤓ Export CSV</button>
+        )}
+      </div>
 
       {selectable && selection.selectedRows.length > 0 && bulkActions && (
         <div className="rbe-table-bulk-toolbar">
@@ -268,17 +275,7 @@ export function Table<T>(props: TableProps<T>) {
                 </th>
               );
             })}
-            <th style={{ textAlign: 'right' }}>
-              <ColumnPicker
-                compact
-                columns={colset.orderedColumns}
-                hidden={colset.hidden}
-                onToggle={colset.toggle}
-                onMove={colset.move}
-                onReset={colset.reset}
-                isCustomized={colset.isCustomized}
-              />
-            </th>
+            <th />
           </tr>
           <tr className="rbe-table-filter-row">
             {selectable && <th />}

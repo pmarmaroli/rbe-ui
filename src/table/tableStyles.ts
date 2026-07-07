@@ -64,7 +64,7 @@ const CSS = `
 .rbe-table-checkbox-cell { width: 36px; text-align: center; }
 .rbe-table-checkbox { width: 18px; height: 18px; cursor: pointer; }
 
-.rbe-table-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+.rbe-table-toolbar { display: flex; align-items: center; justify-content: flex-start; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
 .rbe-table-bulk-toolbar {
   display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
   padding: 8px 14px; background: var(--color-bulk-bg, #eff6ff);
