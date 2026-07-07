@@ -29,7 +29,28 @@ export function Table(props) {
     const { tableId, storageKey, columns, rows, hasAnyRows, rowId, onRowClick, selectedRowId, rowClassName, onVisibleRowsChange, defaultSort, pageSizeOptions = [25, 50, 100], defaultPageSize = 25, stickyHeader = true, stickyColumns = 0, selectable, rowAriaLabel, bulkActions, filterRowExtra, onApplyFilters, filtersDirty, csvFilename, loading, emptyState, noMatchState, actionsColumn, className, } = props;
     ensureTableStyles();
     const colset = useColumnSettings(tableId, columns, storageKey);
-    const { sortKey, dir, toggleSort, setSort, sorted } = useSort(columns, rows, defaultSort);
+    // "Me only" — the one universal, business-agnostic filter every identity
+    // column needs, so Table owns applying it (unlike other filterCell
+    // predicates, which stay page-side).
+    const [meOnlyColumns, setMeOnlyColumns] = useState(new Set());
+    function toggleMeOnly(key) {
+        setMeOnlyColumns((prev) => {
+            const next = new Set(prev);
+            if (next.has(key))
+                next.delete(key);
+            else
+                next.add(key);
+            return next;
+        });
+    }
+    const meFiltered = meOnlyColumns.size === 0 ? rows : rows.filter((row) => {
+        for (const col of columns) {
+            if (col.isMine && meOnlyColumns.has(col.key) && !col.isMine(row))
+                return false;
+        }
+        return true;
+    });
+    const { sortKey, dir, toggleSort, setSort, sorted } = useSort(columns, meFiltered, defaultSort);
     const selection = useRowSelection(sorted, rowId);
     const pagination = usePagination(sorted, pageSizeOptions, defaultPageSize);
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
@@ -121,7 +142,7 @@ export function Table(props) {
         downloadCsv(csvFilename, colset.visibleColumns.map((c) => c.label), buildCsvRows(colset.visibleColumns, sorted));
     }
     const sortableColumns = columns.filter((c) => c.sortKey);
-    const filterableColumns = colset.visibleColumns.filter((c) => c.filterCell);
+    const filterableColumns = colset.visibleColumns.filter((c) => c.filterCell || c.isMine);
     const isEmpty = sorted.length === 0;
     const showEmptyState = isEmpty && hasAnyRows === false;
     const showNoMatch = isEmpty && !showEmptyState;
@@ -130,7 +151,7 @@ export function Table(props) {
                     const [k, d] = e.target.value.split(':');
                     if (k)
                         setSort(k, d);
-                }, children: [_jsx("option", { value: "", children: "Sort by\u2026" }), sortableColumns.map((c) => (_jsxs("optgroup", { label: c.label, children: [_jsxs("option", { value: `${c.sortKey}:asc`, children: [c.label, " (A\u2013Z / low\u2013high)"] }), _jsxs("option", { value: `${c.sortKey}:desc`, children: [c.label, " (Z\u2013A / high\u2013low)"] })] }, c.key)))] })), filterableColumns.length > 0 && (_jsx("button", { type: "button", className: "rbe-table-btn rbe-table-mobile-filters-toggle", onClick: () => setMobileFiltersOpen((o) => !o), children: mobileFiltersOpen ? 'Hide filters' : 'Filters' })), mobileFiltersOpen && (_jsxs("div", { className: "rbe-table-mobile-filters", children: [filterableColumns.map((c) => (_jsxs("div", { className: "rbe-table-mobile-filter-item", children: [_jsx("label", { children: c.label }), c.filterCell()] }, c.key))), filterRowExtra] })), _jsxs("table", { className: cx('rbe-table', hasWidths && 'rbe-table--fixed', stickyHeader && 'rbe-table--sticky-header'), children: [_jsxs("colgroup", { children: [selectable && _jsx("col", { style: { width: 36 } }), colset.visibleColumns.map((col) => (_jsx("col", { style: { width: colset.widths[col.key] ? colset.widths[col.key] + 'px' : undefined } }, col.key))), _jsx("col", {})] }), _jsxs("thead", { children: [_jsxs("tr", { ref: headRowRef, children: [selectable && (_jsx("th", { ref: (el) => { stickyRefs.current[0] = el; }, className: cx('rbe-table-checkbox-cell', stickyColumns > 0 && 'rbe-table-sticky-th'), style: stickyColumns > 0 ? stickyStyle(0) : undefined, children: _jsx("input", { type: "checkbox", className: "rbe-table-checkbox", checked: selection.isAllSelected, ref: (el) => { if (el)
+                }, children: [_jsx("option", { value: "", children: "Sort by\u2026" }), sortableColumns.map((c) => (_jsxs("optgroup", { label: c.label, children: [_jsxs("option", { value: `${c.sortKey}:asc`, children: [c.label, " (A\u2013Z / low\u2013high)"] }), _jsxs("option", { value: `${c.sortKey}:desc`, children: [c.label, " (Z\u2013A / high\u2013low)"] })] }, c.key)))] })), filterableColumns.length > 0 && (_jsx("button", { type: "button", className: "rbe-table-btn rbe-table-mobile-filters-toggle", onClick: () => setMobileFiltersOpen((o) => !o), children: mobileFiltersOpen ? 'Hide filters' : 'Filters' })), mobileFiltersOpen && (_jsxs("div", { className: "rbe-table-mobile-filters", children: [filterableColumns.map((c) => (_jsxs("div", { className: "rbe-table-mobile-filter-item", children: [_jsx("label", { children: c.label }), c.filterCell?.(), c.isMine && (_jsxs("label", { className: "rbe-table-me-only", children: [_jsx("input", { type: "checkbox", checked: meOnlyColumns.has(c.key), onChange: () => toggleMeOnly(c.key) }), "Me only"] }))] }, c.key))), filterRowExtra] })), _jsxs("table", { className: cx('rbe-table', hasWidths && 'rbe-table--fixed', stickyHeader && 'rbe-table--sticky-header'), children: [_jsxs("colgroup", { children: [selectable && _jsx("col", { style: { width: 36 } }), colset.visibleColumns.map((col) => (_jsx("col", { style: { width: colset.widths[col.key] ? colset.widths[col.key] + 'px' : undefined } }, col.key))), _jsx("col", {})] }), _jsxs("thead", { children: [_jsxs("tr", { ref: headRowRef, children: [selectable && (_jsx("th", { ref: (el) => { stickyRefs.current[0] = el; }, className: cx('rbe-table-checkbox-cell', stickyColumns > 0 && 'rbe-table-sticky-th'), style: stickyColumns > 0 ? stickyStyle(0) : undefined, children: _jsx("input", { type: "checkbox", className: "rbe-table-checkbox", checked: selection.isAllSelected, ref: (el) => { if (el)
                                                 el.indeterminate = selection.isIndeterminate; }, onChange: selection.toggleAll, "aria-label": `Select all ${sorted.length} rows` }) })), colset.visibleColumns.map((col, i) => {
                                         const sticky = isSticky(i);
                                         const sIdx = stickyIndex(i);
@@ -138,7 +159,7 @@ export function Table(props) {
                                         return (_jsxs("th", { scope: "col", ref: sticky ? (el) => { stickyRefs.current[sIdx] = el; } : undefined, className: cx(col.numeric && 'rbe-table-num', sticky && 'rbe-table-sticky-th'), style: sticky ? stickyStyle(sIdx) : undefined, "aria-sort": active ? (dir === 'asc' ? 'ascending' : 'descending') : undefined, children: [col.sortKey ? (_jsxs("button", { type: "button", className: "rbe-table-sort-btn", onClick: () => toggleSort(col.sortKey), children: [col.label, active && _jsx("span", { className: "rbe-table-sort-arrow", children: dir === 'asc' ? '▲' : '▼' })] })) : col.label, _jsx("span", { className: "rbe-table-resizer", onPointerDown: (e) => startResize(e, col.key, col.minWidth ?? 60), onClick: (e) => e.stopPropagation() })] }, col.key));
                                     }), _jsx("th", {})] }), _jsxs("tr", { className: "rbe-table-filter-row", children: [selectable && _jsx("th", {}), colset.visibleColumns.map((col, i) => {
                                         const sticky = isSticky(i);
-                                        return (_jsx("th", { className: sticky ? 'rbe-table-sticky-th' : undefined, style: sticky ? stickyStyle(stickyIndex(i)) : undefined, children: col.filterCell ? col.filterCell() : null }, col.key));
+                                        return (_jsxs("th", { className: sticky ? 'rbe-table-sticky-th' : undefined, style: sticky ? stickyStyle(stickyIndex(i)) : undefined, children: [col.filterCell ? col.filterCell() : null, col.isMine && (_jsxs("label", { className: "rbe-table-me-only", children: [_jsx("input", { type: "checkbox", checked: meOnlyColumns.has(col.key), onChange: () => toggleMeOnly(col.key) }), "Me only"] }))] }, col.key));
                                     }), _jsx("th", { children: filterRowExtra })] })] }), _jsx("tbody", { children: showSkeleton ? (Array.from({ length: 5 }).map((_, r) => (_jsx("tr", { children: Array.from({ length: totalColSpan }).map((_, c) => (_jsx("td", { children: _jsx("div", { className: "rbe-table-skeleton-cell" }) }, c))) }, r)))) : showEmptyState ? (_jsx("tr", { children: _jsx("td", { colSpan: totalColSpan, className: "rbe-table-empty", children: emptyState ?? 'No data yet.' }) })) : showNoMatch ? (_jsx("tr", { children: _jsx("td", { colSpan: totalColSpan, className: "rbe-table-empty", children: noMatchState ?? 'No rows match the current filters.' }) })) : (pagination.pageRows.map((row) => {
                             const id = rowId(row);
                             const isSelected = selectedRowId === id;

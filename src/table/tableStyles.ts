@@ -64,6 +64,13 @@ const CSS = `
 .rbe-table-checkbox-cell { width: 36px; text-align: center; }
 .rbe-table-checkbox { width: 18px; height: 18px; cursor: pointer; }
 
+.rbe-table-me-only {
+  display: flex; align-items: center; gap: 4px; margin-top: 4px;
+  font-size: 10px; font-weight: 600; color: var(--color-text-muted, #64748b);
+  cursor: pointer; white-space: nowrap;
+}
+.rbe-table-me-only input { width: 13px; height: 13px; cursor: pointer; }
+
 .rbe-table-toolbar { display: flex; align-items: center; justify-content: flex-start; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
 .rbe-table-bulk-toolbar {
   display: flex; align-items: center; gap: 10px; flex-wrap: wrap;

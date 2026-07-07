@@ -25,6 +25,14 @@ export interface TableColumn<T> {
     sortValue?: (row: T) => string | number;
     /** Filter control rendered in the filter row for this column. */
     filterCell?: () => ReactNode;
+    /**
+     * Marks this column as a person's name/email. When set, Table auto-renders
+     * a "Me only" toggle in this column's filter cell — return true when `row`
+     * belongs to the current user. Table owns applying this filter (it's the
+     * one universal, business-agnostic filter every identity column needs);
+     * everything else in `filterCell` stays page-owned as usual.
+     */
+    isMine?: (row: T) => boolean;
     /** Resize floor in px (default 60). */
     minWidth?: number;
 }

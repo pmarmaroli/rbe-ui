@@ -43,7 +43,26 @@ export function Table<T>(props: TableProps<T>) {
   ensureTableStyles();
 
   const colset = useColumnSettings(tableId, columns, storageKey);
-  const { sortKey, dir, toggleSort, setSort, sorted } = useSort(columns, rows, defaultSort);
+
+  // "Me only" — the one universal, business-agnostic filter every identity
+  // column needs, so Table owns applying it (unlike other filterCell
+  // predicates, which stay page-side).
+  const [meOnlyColumns, setMeOnlyColumns] = useState<Set<string>>(new Set());
+  function toggleMeOnly(key: string) {
+    setMeOnlyColumns((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key); else next.add(key);
+      return next;
+    });
+  }
+  const meFiltered = meOnlyColumns.size === 0 ? rows : rows.filter((row) => {
+    for (const col of columns) {
+      if (col.isMine && meOnlyColumns.has(col.key) && !col.isMine(row)) return false;
+    }
+    return true;
+  });
+
+  const { sortKey, dir, toggleSort, setSort, sorted } = useSort(columns, meFiltered, defaultSort);
   const selection = useRowSelection(sorted, rowId);
   const pagination = usePagination(sorted, pageSizeOptions, defaultPageSize);
 
@@ -140,7 +159,7 @@ export function Table<T>(props: TableProps<T>) {
   }
 
   const sortableColumns = columns.filter((c) => c.sortKey);
-  const filterableColumns = colset.visibleColumns.filter((c) => c.filterCell);
+  const filterableColumns = colset.visibleColumns.filter((c) => c.filterCell || c.isMine);
 
   const isEmpty = sorted.length === 0;
   const showEmptyState = isEmpty && hasAnyRows === false;
@@ -217,7 +236,13 @@ export function Table<T>(props: TableProps<T>) {
           {filterableColumns.map((c) => (
             <div key={c.key} className="rbe-table-mobile-filter-item">
               <label>{c.label}</label>
-              {c.filterCell!()}
+              {c.filterCell?.()}
+              {c.isMine && (
+                <label className="rbe-table-me-only">
+                  <input type="checkbox" checked={meOnlyColumns.has(c.key)} onChange={() => toggleMeOnly(c.key)} />
+                  Me only
+                </label>
+              )}
             </div>
           ))}
           {filterRowExtra}
@@ -286,6 +311,12 @@ export function Table<T>(props: TableProps<T>) {
               return (
                 <th key={col.key} className={sticky ? 'rbe-table-sticky-th' : undefined} style={sticky ? stickyStyle(stickyIndex(i)) : undefined}>
                   {col.filterCell ? col.filterCell() : null}
+                  {col.isMine && (
+                    <label className="rbe-table-me-only">
+                      <input type="checkbox" checked={meOnlyColumns.has(col.key)} onChange={() => toggleMeOnly(col.key)} />
+                      Me only
+                    </label>
+                  )}
                 </th>
               );
             })}
