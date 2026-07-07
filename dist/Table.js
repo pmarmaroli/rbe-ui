@@ -25,7 +25,7 @@ function cx(...parts) {
  * that shape, consolidated.
  */
 export function Table(props) {
-    const { tableId, storageKey, columns, rows, hasAnyRows, rowId, onRowClick, selectedRowId, rowClassName, onVisibleRowsChange, defaultSort, pageSizeOptions = [25, 50, 100], defaultPageSize = 25, stickyHeader = true, stickyColumns = 0, selectable, rowAriaLabel, bulkActions, filterRowExtra, csvFilename, loading, emptyState, noMatchState, actionsColumn, className, } = props;
+    const { tableId, storageKey, columns, rows, hasAnyRows, rowId, onRowClick, selectedRowId, rowClassName, onVisibleRowsChange, defaultSort, pageSizeOptions = [25, 50, 100], defaultPageSize = 25, stickyHeader = true, stickyColumns = 0, selectable, rowAriaLabel, bulkActions, filterRowExtra, onApplyFilters, filtersDirty, csvFilename, loading, emptyState, noMatchState, actionsColumn, className, } = props;
     ensureTableStyles();
     const colset = useColumnSettings(tableId, columns, storageKey);
     const { sortKey, dir, toggleSort, setSort, sorted } = useSort(columns, rows, defaultSort);
@@ -125,7 +125,7 @@ export function Table(props) {
     const showEmptyState = isEmpty && hasAnyRows === false;
     const showNoMatch = isEmpty && !showEmptyState;
     const showSkeleton = !!loading && sorted.length === 0;
-    return (_jsxs("div", { className: cx('rbe-table-wrap', className), children: [csvFilename && (_jsx("div", { className: "rbe-table-toolbar", style: { justifyContent: 'flex-end' }, children: _jsx("button", { type: "button", className: "rbe-table-btn", onClick: handleExport, children: "\u2913 Export CSV" }) })), selectable && selection.selectedRows.length > 0 && bulkActions && (_jsxs("div", { className: "rbe-table-bulk-toolbar", children: [_jsxs("span", { children: [selection.selectedRows.length, " selected"] }), bulkActions(selection.selectedRows, selection.clear), _jsx("button", { type: "button", className: "rbe-table-btn", onClick: selection.clear, children: "Clear selection" })] })), sortableColumns.length > 0 && (_jsxs("select", { className: "rbe-table-mobile-sort", "aria-label": "Sort by", value: sortKey ? `${sortKey}:${dir}` : '', onChange: (e) => {
+    return (_jsxs("div", { className: cx('rbe-table-wrap', className), children: [(csvFilename || onApplyFilters) && (_jsxs("div", { className: "rbe-table-toolbar", style: { justifyContent: 'flex-end' }, children: [onApplyFilters && (_jsx("button", { type: "button", className: cx('rbe-table-btn', 'rbe-table-btn--primary', filtersDirty && 'rbe-table-btn--pulse'), onClick: onApplyFilters, children: "Search" })), csvFilename && (_jsx("button", { type: "button", className: "rbe-table-btn", onClick: handleExport, children: "\u2913 Export CSV" }))] })), selectable && selection.selectedRows.length > 0 && bulkActions && (_jsxs("div", { className: "rbe-table-bulk-toolbar", children: [_jsxs("span", { children: [selection.selectedRows.length, " selected"] }), bulkActions(selection.selectedRows, selection.clear), _jsx("button", { type: "button", className: "rbe-table-btn", onClick: selection.clear, children: "Clear selection" })] })), sortableColumns.length > 0 && (_jsxs("select", { className: "rbe-table-mobile-sort", "aria-label": "Sort by", value: sortKey ? `${sortKey}:${dir}` : '', onChange: (e) => {
                     const [k, d] = e.target.value.split(':');
                     if (k)
                         setSort(k, d);

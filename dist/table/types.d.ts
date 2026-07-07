@@ -64,8 +64,17 @@ export interface TableProps<T> {
     rowAriaLabel?: (row: T) => string;
     /** Rendered in a toolbar that appears above the table once at least one row is selected. */
     bulkActions?: (selectedRows: T[], clearSelection: () => void) => ReactNode;
-    /** Extra controls rendered at the end of the filter row (e.g. an "Archived" toggle, Search/Clear buttons). */
+    /** Extra controls rendered at the end of the filter row (e.g. an "Archived" toggle). */
     filterRowExtra?: ReactNode;
+    /**
+     * When set, a "Search" button is rendered top-right in the table's toolbar
+     * (applying the page's pending filter edits — filter predicates stay
+     * page-side, Table only renders the trigger). Pass `filtersDirty` so the
+     * button can call out unapplied changes.
+     */
+    onApplyFilters?: () => void;
+    /** True when the page's pending filter edits differ from what's currently applied/shown — makes the Search button pulse. */
+    filtersDirty?: boolean;
     /** When set, an "Export CSV" button is rendered, exporting the full filtered+sorted set (all pages) × visible columns. */
     csvFilename?: string;
     loading?: boolean;

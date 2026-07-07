@@ -35,7 +35,7 @@ export function Table<T>(props: TableProps<T>) {
     defaultSort, pageSizeOptions = [25, 50, 100], defaultPageSize = 25,
     stickyHeader = true, stickyColumns = 0,
     selectable, rowAriaLabel, bulkActions,
-    filterRowExtra, csvFilename,
+    filterRowExtra, onApplyFilters, filtersDirty, csvFilename,
     loading, emptyState, noMatchState, actionsColumn, className,
   } = props;
 
@@ -149,9 +149,20 @@ export function Table<T>(props: TableProps<T>) {
 
   return (
     <div className={cx('rbe-table-wrap', className)}>
-      {csvFilename && (
+      {(csvFilename || onApplyFilters) && (
         <div className="rbe-table-toolbar" style={{ justifyContent: 'flex-end' }}>
-          <button type="button" className="rbe-table-btn" onClick={handleExport}>⤓ Export CSV</button>
+          {onApplyFilters && (
+            <button
+              type="button"
+              className={cx('rbe-table-btn', 'rbe-table-btn--primary', filtersDirty && 'rbe-table-btn--pulse')}
+              onClick={onApplyFilters}
+            >
+              Search
+            </button>
+          )}
+          {csvFilename && (
+            <button type="button" className="rbe-table-btn" onClick={handleExport}>⤓ Export CSV</button>
+          )}
         </div>
       )}
 
