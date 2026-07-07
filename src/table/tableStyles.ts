@@ -1,9 +1,7 @@
-// Self-injecting stylesheet for <Table>, kept separate from the top-level
-// styles.ts (Spinner's) so an app importing only { Spinner } never evaluates
-// this much larger CSS string, and vice-versa. Same conventions as Spinner:
-// injected once into document.head, no CSS import needed by consuming apps,
-// CSS custom properties read with safe neutral fallbacks so it looks reasonable
-// even in an app that hasn't defined rbe-cw's --ac-blue-*/--blue tokens.
+// Self-injecting stylesheet for <Table>: injected once into document.head on
+// first use, so consuming apps need no CSS import or build config. CSS custom
+// properties are read with safe neutral fallbacks so it looks reasonable even
+// in an app that hasn't defined rbe-cw's --ac-blue-*/--blue tokens.
 
 const CSS = `
 .rbe-table-wrap { overflow-x: auto; border-radius: var(--radius-lg, 10px); border: 1px solid var(--color-border, #e2e8f0); background: var(--color-white, #fff); }
