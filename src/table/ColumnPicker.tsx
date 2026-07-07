@@ -65,7 +65,7 @@ export function ColumnPicker<T>({ columns, hidden, onToggle, onMove, onReset, is
       {open && (
         <div
           style={{
-            position: 'absolute', top: 'calc(100% + 6px)', right: 0, zIndex: 50,
+            position: 'absolute', top: 'calc(100% + 6px)', left: 0, zIndex: 50,
             width: 260, maxWidth: '90vw', background: '#fff', border: '1px solid #e2e8f0',
             borderRadius: 10, boxShadow: '0 10px 30px rgba(0,0,0,0.15)', padding: 8,
           }}
