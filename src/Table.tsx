@@ -1,4 +1,4 @@
-import { useState, useRef, useLayoutEffect } from 'react';
+import { useState, useRef, useLayoutEffect, useEffect } from 'react';
 import type { PointerEvent as ReactPointerEvent, CSSProperties } from 'react';
 import type { TableProps } from './table/types';
 import { useColumnSettings } from './table/useColumnSettings';
@@ -31,7 +31,7 @@ function cx(...parts: Array<string | false | undefined>): string {
  */
 export function Table<T>(props: TableProps<T>) {
   const {
-    tableId, storageKey, columns, rows, hasAnyRows, rowId, onRowClick, selectedRowId, rowClassName,
+    tableId, storageKey, columns, rows, hasAnyRows, rowId, onRowClick, selectedRowId, rowClassName, onVisibleRowsChange,
     defaultSort, pageSizeOptions = [25, 50, 100], defaultPageSize = 25,
     stickyHeader = true, stickyColumns = 0,
     selectable, rowAriaLabel, bulkActions,
@@ -47,6 +47,11 @@ export function Table<T>(props: TableProps<T>) {
   const pagination = usePagination(sorted, pageSizeOptions, defaultPageSize);
 
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+  useEffect(() => {
+    onVisibleRowsChange?.(pagination.pageRows);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pagination.pageRows]);
 
   // --- Column resize: Pointer Events (mouse + touch/pen) with pointer capture,
   // so the drag keeps tracking even if the pointer leaves the 8px handle. ---

@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useState, useRef, useLayoutEffect } from 'react';
+import { useState, useRef, useLayoutEffect, useEffect } from 'react';
 import { useColumnSettings } from './table/useColumnSettings';
 import { useSort } from './table/useSort';
 import { usePagination } from './table/usePagination';
@@ -25,13 +25,17 @@ function cx(...parts) {
  * that shape, consolidated.
  */
 export function Table(props) {
-    const { tableId, storageKey, columns, rows, hasAnyRows, rowId, onRowClick, selectedRowId, rowClassName, defaultSort, pageSizeOptions = [25, 50, 100], defaultPageSize = 25, stickyHeader = true, stickyColumns = 0, selectable, rowAriaLabel, bulkActions, filterRowExtra, csvFilename, loading, emptyState, noMatchState, actionsColumn, className, } = props;
+    const { tableId, storageKey, columns, rows, hasAnyRows, rowId, onRowClick, selectedRowId, rowClassName, onVisibleRowsChange, defaultSort, pageSizeOptions = [25, 50, 100], defaultPageSize = 25, stickyHeader = true, stickyColumns = 0, selectable, rowAriaLabel, bulkActions, filterRowExtra, csvFilename, loading, emptyState, noMatchState, actionsColumn, className, } = props;
     ensureTableStyles();
     const colset = useColumnSettings(tableId, columns, storageKey);
     const { sortKey, dir, toggleSort, setSort, sorted } = useSort(columns, rows, defaultSort);
     const selection = useRowSelection(sorted, rowId);
     const pagination = usePagination(sorted, pageSizeOptions, defaultPageSize);
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+    useEffect(() => {
+        onVisibleRowsChange?.(pagination.pageRows);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pagination.pageRows]);
     // --- Column resize: Pointer Events (mouse + touch/pen) with pointer capture,
     // so the drag keeps tracking even if the pointer leaves the 8px handle. ---
     const headRowRef = useRef(null);

@@ -42,6 +42,13 @@ export interface TableProps<T> {
     onRowClick?: (row: T) => void;
     selectedRowId?: string | null;
     rowClassName?: (row: T) => string | undefined;
+    /**
+     * Fires with the exact on-screen row order (post sort, post pagination)
+     * whenever it changes. Sorting/pagination are Table-owned, so a caller that
+     * needs the true visual order for something else — e.g. keyboard up/down
+     * navigation via `data-rowid` — has no other way to get it.
+     */
+    onVisibleRowsChange?: (rows: T[]) => void;
     /** Initial sort; user interaction takes over from here. */
     defaultSort?: {
         key: string;
