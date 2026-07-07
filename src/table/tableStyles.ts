@@ -71,7 +71,16 @@ const CSS = `
 }
 .rbe-table-me-only input { width: 13px; height: 13px; cursor: pointer; }
 
-.rbe-table-toolbar { display: flex; align-items: center; justify-content: flex-start; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+.rbe-table-toolbar {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px;
+  padding: 12px 14px 0 14px; margin-bottom: 10px;
+}
+.rbe-table-toolbar-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-self: start; }
+.rbe-table-toolbar-center { justify-self: center; }
+@media (max-width: 640px) {
+  .rbe-table-toolbar { grid-template-columns: 1fr; justify-items: start; }
+  .rbe-table-toolbar-center { justify-self: start; }
+}
 .rbe-table-bulk-toolbar {
   display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
   padding: 8px 14px; background: var(--color-bulk-bg, #eff6ff);

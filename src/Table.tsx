@@ -170,28 +170,31 @@ export function Table<T>(props: TableProps<T>) {
   return (
     <div className={cx('rbe-table-wrap', className)}>
       <div className="rbe-table-toolbar">
-        <ColumnPicker
-          compact
-          columns={colset.orderedColumns}
-          hidden={colset.hidden}
-          onToggle={colset.toggle}
-          onMove={colset.move}
-          onReset={colset.reset}
-          isCustomized={colset.isCustomized}
-        />
+        <div className="rbe-table-toolbar-left">
+          <ColumnPicker
+            compact
+            columns={colset.orderedColumns}
+            hidden={colset.hidden}
+            onToggle={colset.toggle}
+            onMove={colset.move}
+            onReset={colset.reset}
+            isCustomized={colset.isCustomized}
+          />
+          {csvFilename && (
+            <button type="button" className="rbe-table-btn" onClick={handleExport}>⤓ Export CSV</button>
+          )}
+        </div>
         {onApplyFilters && (
           <BlinkButton
             type="button"
-            className="rbe-table-btn"
+            className="rbe-table-btn rbe-table-toolbar-center"
             blinking={filtersDirty}
             onClick={onApplyFilters}
           >
             Search
           </BlinkButton>
         )}
-        {csvFilename && (
-          <button type="button" className="rbe-table-btn" onClick={handleExport}>⤓ Export CSV</button>
-        )}
+        <div />
       </div>
 
       {selectable && selection.selectedRows.length > 0 && bulkActions && (
