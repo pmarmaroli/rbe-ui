@@ -97,6 +97,14 @@ const CSS = `
 .rbe-table-btn:hover:not(:disabled) { border-color: var(--blue, #2563eb); color: var(--blue, #2563eb); }
 .rbe-table-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
+/* Matches rbe-cw's SaveBar .btnSave exactly (same BlinkButton, same "primary
+   action" identity) — Export CSV/Columns stay the smaller neutral rbe-table-btn. */
+.rbe-table-search-btn {
+  padding: 10px 24px; background: var(--blue, #2563eb); color: #fff; border: none;
+  border-radius: 8px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer;
+}
+.rbe-table-search-btn:hover:not(:disabled) { background: var(--blue-hover, #1d4ed8); }
+
 .rbe-table-empty { text-align: center; padding: 50px 14px; color: var(--color-text-muted, #94a3b8); font-size: 13px; }
 
 .rbe-table-skeleton-cell {

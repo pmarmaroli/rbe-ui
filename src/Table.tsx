@@ -187,7 +187,7 @@ export function Table<T>(props: TableProps<T>) {
         {onApplyFilters && (
           <BlinkButton
             type="button"
-            className="rbe-table-btn rbe-table-toolbar-center"
+            className="rbe-table-search-btn rbe-table-toolbar-center"
             blinking={filtersDirty}
             onClick={onApplyFilters}
           >
