@@ -9,5 +9,5 @@ export function NumberRangeFilter({ min, max, onChange, onEnter, className }) {
         if (e.key === 'Enter' && onEnter)
             onEnter();
     };
-    return (_jsxs("div", { style: { display: 'flex', gap: 4 }, children: [_jsx("input", { className: className, type: "number", inputMode: "decimal", placeholder: "Min", value: min, onChange: (e) => onChange({ min: e.target.value, max }), onKeyDown: handleKeyDown, style: { width: '50%', minWidth: 0 } }), _jsx("input", { className: className, type: "number", inputMode: "decimal", placeholder: "Max", value: max, onChange: (e) => onChange({ min, max: e.target.value }), onKeyDown: handleKeyDown, style: { width: '50%', minWidth: 0 } })] }));
+    return (_jsxs("div", { style: { display: 'flex', flexDirection: 'column', gap: 4 }, children: [_jsx("input", { className: className, type: "number", inputMode: "decimal", placeholder: "Min", value: min, onChange: (e) => onChange({ min: e.target.value, max }), onKeyDown: handleKeyDown, style: { width: '100%', minWidth: 0, boxSizing: 'border-box' } }), _jsx("input", { className: className, type: "number", inputMode: "decimal", placeholder: "Max", value: max, onChange: (e) => onChange({ min, max: e.target.value }), onKeyDown: handleKeyDown, style: { width: '100%', minWidth: 0, boxSizing: 'border-box' } })] }));
 }

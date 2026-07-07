@@ -16,7 +16,7 @@ export function NumberRangeFilter({ min, max, onChange, onEnter, className }: Pr
     if (e.key === 'Enter' && onEnter) onEnter();
   };
   return (
-    <div style={{ display: 'flex', gap: 4 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
       <input
         className={className}
         type="number"
@@ -25,7 +25,7 @@ export function NumberRangeFilter({ min, max, onChange, onEnter, className }: Pr
         value={min}
         onChange={(e) => onChange({ min: e.target.value, max })}
         onKeyDown={handleKeyDown}
-        style={{ width: '50%', minWidth: 0 }}
+        style={{ width: '100%', minWidth: 0, boxSizing: 'border-box' }}
       />
       <input
         className={className}
@@ -35,7 +35,7 @@ export function NumberRangeFilter({ min, max, onChange, onEnter, className }: Pr
         value={max}
         onChange={(e) => onChange({ min, max: e.target.value })}
         onKeyDown={handleKeyDown}
-        style={{ width: '50%', minWidth: 0 }}
+        style={{ width: '100%', minWidth: 0, boxSizing: 'border-box' }}
       />
     </div>
   );
