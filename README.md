@@ -26,6 +26,7 @@ defines them, otherwise falls back to neutral greys.
 ## Components
 
 - `Spinner` — Rail Baltica branded loading animation (navy→gold arc, reduced-motion aware).
+- `Table` — data table with sorting, per-column filter row, client-side pagination, column show/hide/reorder/resize (persisted, touch-friendly), sticky header + leading columns, row selection + bulk actions, CSV export, a CSS-only stacked mobile layout, and baseline accessibility. See `src/table/types.ts` for the `TableColumn<T>`/`TableProps<T>` contract.
 
 ## Develop / release
 
