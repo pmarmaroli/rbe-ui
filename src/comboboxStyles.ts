@@ -10,7 +10,11 @@ const CSS = `
 }
 .rbe-combobox-input:focus { border-color: var(--blue, #2563eb); }
 .rbe-combobox-list {
-  position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 50;
+  position: absolute; top: calc(100% + 4px); left: 0; z-index: 50;
+  /* Grow to fit the longest option (so codes like "2205 — Improvement layer"
+     aren't truncated to "2205…" inside a narrow field/cell), never narrower
+     than the field, capped so it stays on screen. */
+  min-width: 100%; width: max-content; max-width: min(480px, 90vw);
   max-height: 260px; overflow-y: auto; margin: 0; padding: 4px; list-style: none;
   background: #fff; border: 1px solid #e2e8f0; border-radius: 8px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.15);
