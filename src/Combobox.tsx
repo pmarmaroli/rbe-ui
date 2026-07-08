@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import type { InputHTMLAttributes } from 'react';
+import type { CSSProperties, InputHTMLAttributes } from 'react';
+import { createPortal } from 'react-dom';
 import { ensureComboboxStyles } from './comboboxStyles';
 
 export interface ComboboxOption {
@@ -37,15 +38,38 @@ export function Combobox({
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [highlighted, setHighlighted] = useState(0);
+  const [menuStyle, setMenuStyle] = useState<CSSProperties>({});
   const ref = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
 
+  // The list is portaled to <body> so it escapes any overflow/clip ancestor
+  // (scrolling tables, cards). Position it (fixed) under the input and keep it
+  // anchored as ancestors scroll or the window resizes.
   useEffect(() => {
     if (!open) return;
+    function reposition() {
+      const el = ref.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      setMenuStyle({
+        position: 'fixed', top: r.bottom + 4, left: r.left, right: 'auto',
+        minWidth: r.width, width: 'max-content', maxWidth: 'min(480px, 90vw)', zIndex: 9999,
+      });
+    }
+    reposition();
     function onDoc(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) { setOpen(false); setQuery(''); }
+      const t = e.target as Node;
+      if (ref.current?.contains(t) || listRef.current?.contains(t)) return;
+      setOpen(false); setQuery('');
     }
     document.addEventListener('mousedown', onDoc);
-    return () => document.removeEventListener('mousedown', onDoc);
+    window.addEventListener('scroll', reposition, true);
+    window.addEventListener('resize', reposition);
+    return () => {
+      document.removeEventListener('mousedown', onDoc);
+      window.removeEventListener('scroll', reposition, true);
+      window.removeEventListener('resize', reposition);
+    };
   }, [open]);
 
   const selected = options.find((o) => o.value === value);
@@ -102,8 +126,8 @@ export function Combobox({
         onChange={(e) => { setQuery(e.target.value); setOpen(true); setHighlighted(0); }}
         onKeyDown={handleKeyDown}
       />
-      {open && (
-        <ul className="rbe-combobox-list" role="listbox">
+      {open && createPortal(
+        <ul ref={listRef} className="rbe-combobox-list" role="listbox" style={menuStyle}>
           {allowClear && (
             <li
               role="option"
@@ -127,7 +151,8 @@ export function Combobox({
           ))}
           {shown.length === 0 && <li className="rbe-combobox-empty">No matches</li>}
           {truncated && <li className="rbe-combobox-empty">+{filtered.length - shown.length} more — keep typing to narrow it down</li>}
-        </ul>
+        </ul>,
+        document.body
       )}
     </div>
   );
