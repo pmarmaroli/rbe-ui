@@ -12,6 +12,14 @@ const CSS = `
   border: 1px solid var(--color-border, #e2e8f0);
   border-radius: var(--radius, 10px);
   padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+}
+.rbe-stat-card-icon {
+  margin-top: auto;
+  padding-top: 10px;
+  font-size: 28px;
+  line-height: 1;
 }
 .rbe-stat-card-value {
   font-size: 26px;

@@ -10,7 +10,9 @@ export interface StatCardProps {
     label: string;
     /** Overrides the default value color (e.g. to color-code by status). */
     valueColor?: string;
+    /** Optional glyph/emoji pinned to the bottom of the card. */
+    icon?: ReactNode;
     className?: string;
 }
-/** Flat KPI card: a big number/value on top, a small uppercase label below. */
-export declare function StatCard({ value, label, valueColor, className }: StatCardProps): import("react").JSX.Element;
+/** Flat KPI card: a big number/value on top, a small uppercase label below, and an optional icon at the bottom. */
+export declare function StatCard({ value, label, valueColor, icon, className }: StatCardProps): import("react").JSX.Element;

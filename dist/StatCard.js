@@ -8,8 +8,8 @@ export function StatCards({ children, className }) {
     ensureStatCardStyles();
     return _jsx("div", { className: cx('rbe-stat-cards', className), children: children });
 }
-/** Flat KPI card: a big number/value on top, a small uppercase label below. */
-export function StatCard({ value, label, valueColor, className }) {
+/** Flat KPI card: a big number/value on top, a small uppercase label below, and an optional icon at the bottom. */
+export function StatCard({ value, label, valueColor, icon, className }) {
     ensureStatCardStyles();
-    return (_jsxs("div", { className: cx('rbe-stat-card', className), children: [_jsx("div", { className: "rbe-stat-card-value", style: valueColor ? { color: valueColor } : undefined, children: value }), _jsx("div", { className: "rbe-stat-card-label", children: label })] }));
+    return (_jsxs("div", { className: cx('rbe-stat-card', className), children: [_jsx("div", { className: "rbe-stat-card-value", style: valueColor ? { color: valueColor } : undefined, children: value }), _jsx("div", { className: "rbe-stat-card-label", children: label }), icon != null && _jsx("div", { className: "rbe-stat-card-icon", children: icon })] }));
 }
