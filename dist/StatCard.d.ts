@@ -12,7 +12,9 @@ export interface StatCardProps {
     valueColor?: string;
     /** Optional glyph/emoji pinned to the bottom of the card. */
     icon?: ReactNode;
+    /** Optional small caption below the label (e.g. "present personnel"). */
+    sub?: ReactNode;
     className?: string;
 }
-/** Flat KPI card: a big number/value on top, a small uppercase label below, and an optional icon at the bottom. */
-export declare function StatCard({ value, label, valueColor, icon, className }: StatCardProps): import("react").JSX.Element;
+/** Flat KPI card: a big number/value on top, a small uppercase label below, an optional sub-caption, and an optional icon at the bottom. */
+export declare function StatCard({ value, label, valueColor, icon, sub, className }: StatCardProps): import("react").JSX.Element;

@@ -23,16 +23,19 @@ export interface StatCardProps {
   valueColor?: string;
   /** Optional glyph/emoji pinned to the bottom of the card. */
   icon?: ReactNode;
+  /** Optional small caption below the label (e.g. "present personnel"). */
+  sub?: ReactNode;
   className?: string;
 }
 
-/** Flat KPI card: a big number/value on top, a small uppercase label below, and an optional icon at the bottom. */
-export function StatCard({ value, label, valueColor, icon, className }: StatCardProps) {
+/** Flat KPI card: a big number/value on top, a small uppercase label below, an optional sub-caption, and an optional icon at the bottom. */
+export function StatCard({ value, label, valueColor, icon, sub, className }: StatCardProps) {
   ensureStatCardStyles();
   return (
     <div className={cx('rbe-stat-card', className)}>
       <div className="rbe-stat-card-value" style={valueColor ? { color: valueColor } : undefined}>{value}</div>
       <div className="rbe-stat-card-label">{label}</div>
+      {sub != null && <div className="rbe-stat-card-sub">{sub}</div>}
       {icon != null && <div className="rbe-stat-card-icon">{icon}</div>}
     </div>
   );

@@ -34,6 +34,11 @@ const CSS = `
   letter-spacing: 0.5px;
   margin-top: 2px;
 }
+.rbe-stat-card-sub {
+  font-size: 11px;
+  color: var(--color-text-muted, #94a3b8);
+  margin-top: 4px;
+}
 @media (max-width: 600px) {
   .rbe-stat-cards { grid-template-columns: repeat(2, 1fr); }
   .rbe-stat-card { padding: 10px 12px; }
