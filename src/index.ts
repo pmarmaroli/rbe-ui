@@ -12,3 +12,6 @@ export type { FilterCardProps, FilterGroupsProps, FilterGroupProps, SegmentedTog
 
 export { StatCards, StatCard } from './StatCard';
 export type { StatCardsProps, StatCardProps } from './StatCard';
+
+export { Donut } from './Donut';
+export type { DonutProps, DonutSlice } from './Donut';
