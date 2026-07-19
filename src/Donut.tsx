@@ -198,7 +198,7 @@ export function Donut({
           scale: true,
           scaleSize: 8,
           itemStyle: { shadowBlur: 16, shadowColor: 'rgba(0,0,0,0.25)' },
-          label: { show: true, fontSize: 14, fontWeight: 700 },
+          label: { show: labelPosition !== 'none', fontSize: 14, fontWeight: 700 },
         },
         label: labelCfg,
         labelLine: { show: labelPosition === 'outside', length: 10, length2: 16 },
