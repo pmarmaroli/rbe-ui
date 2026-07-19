@@ -50,7 +50,11 @@ export function Donut({ slices, centerValue, centerLabel, height = 120, legend =
     const total = slices.reduce((sum, sl) => sum + sl.value, 0);
     const outerR = labelPosition === 'outside' ? 56 : 72;
     const innerPct = Math.round(innerRadius * outerR);
-    const legendRows = legend === 'bottom' ? Math.max(1, Math.ceil(slices.length / 3)) : 0;
+    // Legend rows are sized off unique labels, not raw slice count — a decal
+    // pair (e.g. Build + Design) shares one label and renders as a single
+    // legend entry, so counting flattened slices would over-reserve space.
+    const uniqueLabelCount = legend === 'bottom' ? new Set(slices.map(sl => sl.label)).size : 0;
+    const legendRows = legend === 'bottom' ? Math.max(1, Math.ceil(uniqueLabelCount / 3)) : 0;
     const legendH = legend === 'bottom' ? legendRows * 22 + 8 : 0;
     const pieTopPx = 10;
     const pieBottomPx = legend === 'bottom' ? legendH + 12 : pieTopPx;
@@ -153,6 +157,9 @@ export function Donut({ slices, centerValue, centerLabel, height = 120, legend =
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [slices, total, innerPct, outerR, pieCenterPct, legend, labelPosition, formatValue, tooltip, showAtPct, veryDense, vSize, pSize]);
-    const showCenter = labelPosition === 'inside' && (centerValue != null || centerLabel != null);
+    // Center text competes for space with outside labels/label-lines, so it's
+    // only suppressed for labelPosition='outside' — 'inside' and 'none' both
+    // leave the middle of the ring free for it.
+    const showCenter = labelPosition !== 'outside' && (centerValue != null || centerLabel != null);
     return (_jsxs("div", { className: cx('rbe-donut', className), style: { '--rbe-donut-center-top': `${pieCenterPct}%` }, children: [_jsx(ReactEChartsCore, { echarts: echarts, option: option, style: { height }, opts: { renderer: 'svg' }, notMerge: true, onEvents: onSliceClick ? { click: (p) => onSliceClick(slices[p.dataIndex]) } : undefined }), showCenter && (_jsxs("div", { className: "rbe-donut-center", children: [centerValue != null && _jsx("div", { className: "rbe-donut-center-value", children: centerValue }), centerLabel != null && _jsx("div", { className: "rbe-donut-center-label", children: centerLabel })] }))] }));
 }
