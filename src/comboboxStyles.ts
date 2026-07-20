@@ -3,12 +3,18 @@
 
 const CSS = `
 .rbe-combobox { position: relative; display: inline-block; width: 100%; }
-.rbe-combobox-input {
+/* :where() = zero specificity, so any page's own className (even a single
+   class like .search/.select/.input) always wins ties against these
+   defaults — without it, this rule and a page's same-specificity class
+   tie, and this one wins purely because it's injected into <head> later
+   (at first Combobox mount), silently shrinking the field regardless of
+   what the page's class specifies. */
+:where(.rbe-combobox-input) {
   width: 100%; box-sizing: border-box; padding: 4px 7px;
   border: 1px solid var(--color-border, #cbd5e1); border-radius: 5px;
   font-size: 11px; background: #fff; color: var(--color-text, #334155); outline: none;
 }
-.rbe-combobox-input:focus { border-color: var(--blue, #2563eb); }
+:where(.rbe-combobox-input):focus { border-color: var(--blue, #2563eb); }
 .rbe-combobox-list {
   position: absolute; top: calc(100% + 4px); left: 0; z-index: 50;
   /* Grow to fit the longest option (so codes like "2205 — Improvement layer"
