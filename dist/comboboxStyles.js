@@ -20,7 +20,12 @@ const CSS = `
 }
 .rbe-combobox-option {
   padding: 6px 10px; font-size: 12px; color: var(--color-text, #334155);
-  border-radius: 5px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  border-radius: 5px; cursor: pointer;
+  /* Wrap instead of single-line ellipsis: a 480px-wide popup still isn't
+     enough for long labels ("Framework agreement for supply of materials
+     including bitu…"), so let them take a second/third line instead of
+     hiding text no hover/tooltip ever revealed. */
+  white-space: normal; overflow-wrap: break-word;
 }
 .rbe-combobox-option:hover, .rbe-combobox-option--active { background: var(--ac-blue-soft, #eff6ff); }
 .rbe-combobox-option[aria-selected="true"] { font-weight: 600; }
